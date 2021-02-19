@@ -14,7 +14,7 @@ services:
     environment:
       - DAMCore_DB_HOST=mysql_db_container
     volumes:
-      - ../../damcore/.:/app
+      - ../../DAM-ProjectCore/.:/app
       - ../../static/.:/static
     tty: true
     links:
