@@ -17,6 +17,7 @@ from sqlalchemy import Column, Date, DateTime, Enum, ForeignKey, Integer, Unicod
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
 from sqlalchemy.orm import relationship
+from sqlalchemy_imageattach.entity import Image, image_attachment
 from sqlalchemy_i18n import make_translatable
 
 import messages
@@ -68,16 +69,17 @@ class EventStatusEnum(enum.Enum):
     undefined = "U"
 
 
-EventParticipantsAssociation = Table("event_participants_association", SQLAlchemyBase.metadata,
+"""EventParticipantsAssociation = Table("event_participants_association", SQLAlchemyBase.metadata,
                                      Column("event_id", Integer,
-                                            ForeignKey("events.id", onupdate="CASCADE", ondelete="CASCADE"),
+                                           ForeignKey("events.id", onupdate="CASCADE", ondelete="CASCADE"),
                                             nullable=False),
                                      Column("user_id", Integer,
                                             ForeignKey("users.id", onupdate="CASCADE", ondelete="CASCADE"),
                                             nullable=False),
                                      )
+"""
 
-
+"""
 class Event(SQLAlchemyBase, JSONModel):
     __tablename__ = "events"
 
@@ -143,8 +145,8 @@ class Event(SQLAlchemyBase, JSONModel):
             "registered": [enrolled.username for enrolled in self.registered],
             "status": self.status.value
         }
-
-
+"""
+"""
 class UserToken(SQLAlchemyBase):
     __tablename__ = "users_tokens"
 
@@ -152,9 +154,25 @@ class UserToken(SQLAlchemyBase):
     token = Column(Unicode(50), nullable=False, unique=True)
     user_id = Column(Integer, ForeignKey("users.id", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
     user = relationship("User", back_populates="tokens")
+"""
+class Player(SQLAlchemyBase):
+    __tablename__ = "players"
+    username = Column(UnicodeText,primary_key=True, unique=True)
+    password = Column(Unicode(50), nullable=False)
+    pic_coins = Column(Integer, default=0)
+    wins = Column(Integer, default = 0)
+    xp = Column(Integer, default=0)
 
 
+class Card(SQLAlchemyBase):
+    __tablename__ = "cards"
+    letter = Column(UnicodeText,primary_key=True, unique=True)
+    image = Column(image_attachment('UserPicture'))
+    
+"""
 class User(SQLAlchemyBase, JSONModel):
+
+
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
@@ -220,3 +238,4 @@ class User(SQLAlchemyBase, JSONModel):
             "phone": self.phone,
             "photo": self.photo_url
         }
+"""
