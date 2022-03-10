@@ -9,7 +9,7 @@ from sqlalchemy.sql import text
 
 import db
 import settings
-from db.models import SQLAlchemyBase, User, GenereEnum, UserToken, Event, EventTypeEnum
+from db.models import SQLAlchemyBase, Player, Card, User, GenereEnum, UserToken, Event, EventTypeEnum
 from settings import DEFAULT_LANGUAGE
 
 # LOGGING
@@ -133,7 +133,25 @@ if __name__ == "__main__":
 
     '----------------------------------------------------------------'
 
-    'crete new tables'
+    mylogger.info('creant jugadors')
+
+    for i in range(1, 11):
+        player = Player(
+            username = "username" + i,
+            password = i,
+            pic_coins = 0
+            wins = 0
+            xp = 0
+        )
+
+    
+    mylogger.info('creant cartes')
+
+    for i in range(1, 11):
+        carta = Card(
+            letter = str(i),
+            image = "",
+        )
 
     '----------------------------------------------------------------'
 
