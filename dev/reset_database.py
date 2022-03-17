@@ -9,7 +9,7 @@ from sqlalchemy.sql import text
 
 import db
 import settings
-from db.models import SQLAlchemyBase, Player, Card, User, GenereEnum, PlayerToken, Event, EventTypeEnum
+from db.models import SQLAlchemyBase, Player, Card, GenereEnum, PlayerToken, EventTypeEnum
 from settings import DEFAULT_LANGUAGE
 
 # LOGGING
@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
     mylogger.info("Creating user alex and paula...")
 
-    player = Player(
+    player1 = Player(
         username = "Alex",
         password = "1234",
         pic_coins = 2,
@@ -56,16 +56,19 @@ if __name__ == "__main__":
         xp = 4
     )
 
+    player1.tokens.append(PlayerToken(token="656e50e154865a5dc469b80437ed2f963b8f58c8857b66c9bf"))
+    player2.tokens.append(PlayerToken(token="656e50e154865a5dc469b80437ed2f963b8f58c8857b66c9bf"))
 
-    db_session.add(player)
+
+    db_session.add(player1)
     db_session.add(player2) 
 
 
 
     # -------------------- CREATE USERS --------------------
-    'mylogger.info("Creating default users...")'
+    mylogger.info("Creating default users...")
     # noinspection PyArgumentList
-
+'''
     
     user_admin = User(
         created_at=datetime.datetime(2020, 1, 1, 0, 1, 1),
@@ -107,10 +110,11 @@ if __name__ == "__main__":
     db_session.add(user_1)
     db_session.add(user_2)
 
-
+'''
     # -------------------- CREATE EVENTS --------------------
 
-    day_period = datetime.timedelta(days=1)
+'''
+day_period = datetime.timedelta(days=1)
 
     event_hackatoon = Event(
         created_at=datetime.datetime.now(),
@@ -151,10 +155,7 @@ if __name__ == "__main__":
     db_session.add(event_lanparty)
 
 
-
-    db_session.commit()
-
-
-
+''' 
+db_session.commit()
 
 db_session.close()
