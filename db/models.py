@@ -6,19 +6,18 @@ import datetime
 import enum
 import logging
 import os
+
 from _operator import and_
 from builtins import getattr
 from urllib.parse import urljoin
-from xmlrpc.client import Boolean
 
 import falcon
 from passlib.hash import pbkdf2_sha256
 from sqlalchemy import Column, Date, DateTime, Enum, ForeignKey, Integer, Unicode, \
-    UnicodeText, Table, type_coerce, case
+    UnicodeText, Table, type_coerce, case, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
 from sqlalchemy.orm import relationship
-from sqlalchemy_imageattach.entity import Image, image_attachment
 from sqlalchemy_i18n import make_translatable
 
 import messages
@@ -152,27 +151,28 @@ class Event(SQLAlchemyBase, JSONModel):
 '''
 class Imatge(SQLAlchemyBase, JSONModel):
     __tablename__ = "imatges"
-    nom_imatge = Column(UnicodeText, primary_key=True, unique=True)
-    imatge_nivell = Column(Unicode(50))
+    nom_imatge = Column(Unicode(200), primary_key=True, unique=True)
+    imatge_nivell = Column(Unicode(200))
 
 class Partida(SQLAlchemyBase, JSONModel):
     __tablename__ = "partides"
     id_partida = Column(Integer, primary_key=True)
-    username = Column(Unicode(50), nullable=False, unique=True)
-    score = Column(Integer, ForeignKey("players.username", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
+    username = Column(Unicode(200), nullable=False, unique=True)
+    #score = Column(Integer, ForeignKey("players.username", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
     temps = Column(Integer)
     guanyat = Column(Boolean)
 
+"""
 class PlayerToken(SQLAlchemyBase, JSONModel):
     __tablename__ = "players_tokens"
     username = Column(Integer, ForeignKey("players.username"))
     token = Column(Unicode(50), nullable=False, unique=True, primary_key=True)
-
+"""
 class Player(SQLAlchemyBase, JSONModel):
     __tablename__ = "players"
-    username = Column(UnicodeText,primary_key=True, unique=True)
-    tokens = relationship("PlayerToken", back_populates="player", cascade="all, delete-orphan")
-    password = Column(Unicode(50), nullable=False)
+    username = Column(Unicode(200),primary_key=True, unique=True)
+    #tokens = relationship("PlayeToken", back_populates="player", cascade="all, delete-orphan")
+    password = Column(Unicode(200), nullable=False)
     pic_coins = Column(Integer, default=0)
     wins = Column(Integer, default = 0)
     xp = Column(Integer, default=0)
@@ -180,15 +180,15 @@ class Player(SQLAlchemyBase, JSONModel):
 
 class Card(SQLAlchemyBase, JSONModel):
     __tablename__ = "cards"
-    letter = Column(UnicodeText,primary_key=True, unique=True)
+    letter = Column(Unicode(200),primary_key=True, unique=True)
     imatge_lletra = Column(Unicode(50))
     
-class posicio(SQLAlchemyBase, JSONModel):
-    __tablename__ = "cards"
-    id_partida = Column(Integer, ForeignKey("partida.username"))
-    letter = Column(UnicodeText, ForeignKey("cards.letter"))
-'''
+#class posicio(SQLAlchemyBase, JSONModel):
+#    __tablename__ = "posicio"
+#    id_partida = Column(Integer,ForeignKey("partida.username"))
+#    letter = Column(UnicodeText, ForeignKey("cards.letter"))
 
+"""
 class UserToken(SQLAlchemyBase, JSONModel):
     __tablename__ = "user_token"
     username = Column(Integer, ForeignKey("user.id"))
@@ -203,16 +203,16 @@ class User(SQLAlchemyBase, JSONModel):
     username = Column(Unicode(50), nullable=False, unique=True)
     password = Column(UnicodeText, nullable=False)
     email = Column(Unicode(255), nullable=False)
-    tokens = relationship("UserToken", back_populates="user", cascade="all, delete-orphan")
+    tokens = relationship("UserToken", back_populates="users", cascade="all, delete-orphan")
     name = Column(Unicode(50), nullable=False)
     surname = Column(Unicode(50), nullable=False)
     birthdate = Column(Date)
     genere = Column(Enum(GenereEnum), nullable=False)
     phone = Column(Unicode(50))
     photo = Column(Unicode(255))
-    events_owner = relationship("Event", back_populates="owner", cascade="all, delete-orphan")
-    events_enrolled = relationship("Event", back_populates="registered")
-'''
+    #events_owner = relationship("Event", back_populates="owner", cascade="all, delete-orphan")
+    #events_enrolled = relationship("Event", back_populates="registered")
+
 @hybrid_property
 def public_profile(self):
     return {
@@ -242,7 +242,7 @@ def check_password(self, password_string):
 def create_token(self):
     if len(self.tokens) < settings.MAX_USER_TOKENS:
         token_string = binascii.hexlify(os.urandom(25)).decode("utf-8")
-        aux_token = PlayerToken(token=token_string, user=self)
+        aux_token = UserToken(token=token_string, user=self)
         return aux_token
     else:
         raise falcon.HTTPBadRequest(title=messages.quota_exceded, description=messages.maximum_tokens_exceded)
@@ -262,3 +262,4 @@ def json_model(self):
             "phone": self.phone,
             "photo": self.photo_url
         }
+"""

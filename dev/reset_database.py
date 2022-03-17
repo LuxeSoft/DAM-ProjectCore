@@ -9,7 +9,7 @@ from sqlalchemy.sql import text
 
 import db
 import settings
-from db.models import SQLAlchemyBase, Player, Card, GenereEnum, PlayerToken, EventTypeEnum
+from db.models import SQLAlchemyBase, Player, Card, GenereEnum, EventTypeEnum
 from settings import DEFAULT_LANGUAGE
 
 # LOGGING
@@ -56,8 +56,8 @@ if __name__ == "__main__":
         xp = 4
     )
 
-    player1.tokens.append(PlayerToken(token="656e50e154865a5dc469b80437ed2f963b8f58c8857b66c9bf"))
-    player2.tokens.append(PlayerToken(token="656e50e154865a5dc469b80437ed2f963b8f58c8857b66c9bf"))
+    #player1.tokens.append(PlayerToken(token="656e50e154865a5dc469b80437ed2f963b8f58c8857b66c9bf"))
+    #player2.tokens.append(PlayerToken(token="656e50e154865a5dc469b80437ed2f963b8f58c8857b66c9bf"))
 
 
     db_session.add(player1)

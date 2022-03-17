@@ -8,7 +8,7 @@ import falcon
 import messages
 import middlewares
 from falcon_multipart.middleware import MultipartMiddleware
-from resources import account_resources, common_resources, user_resources, event_resources
+from resources import common_resources, partida_resource
 from settings import configure_logging
 
 # LOGGING
@@ -33,20 +33,18 @@ app = application = falcon.API(
 )
 application.add_route("/", common_resources.ResourceHome())
 
-application.add_route("/account/profile", account_resources.ResourceAccountUserProfile())
-application.add_route("/account/profile/update_profile_image", account_resources.ResourceAccountUpdateProfileImage())
-application.add_route("/account/create_token", account_resources.ResourceCreateUserToken())
-application.add_route("/account/delete_token", account_resources.ResourceDeleteUserToken())
+#application.add_route("/account/profile", account_resources.ResourceAccountUserProfile())
+#application.add_route("/account/profile/update_profile_image", account_resources.ResourceAccountUpdateProfileImage())
+#application.add_route("/account/create_token", account_resources.ResourceCreateUserToken())
+#application.add_route("/account/delete_token", account_resources.ResourceDeleteUserToken())
 
-application.add_route("/users/register", user_resources.ResourceRegisterUser())
-application.add_route("/users/show/{username}", user_resources.ResourceGetUserProfile())
+#application.add_route("/users/register", user_resources.ResourceRegisterUser())
+#application.add_route("/users/show/{username}", user_resources.ResourceGetUserProfile())
 
 'start peticions noves...'
 
-application.add_route("/partida",event_resources.ResourceGetPartida())
+application.add_route("/partida",partida_resource.ResourceGetPartida())
 
 'end peticions noves'
 
-application.add_route("/events", event_resources.ResourceGetEvents())
-application.add_route("/events/show/{id:int}", event_resources.ResourceGetEvent()) 
 application.add_sink(handle_404, "")
