@@ -9,6 +9,7 @@ import os
 from _operator import and_
 from builtins import getattr
 from urllib.parse import urljoin
+from xmlrpc.client import Boolean
 
 import falcon
 from passlib.hash import pbkdf2_sha256
@@ -148,18 +149,29 @@ class Event(SQLAlchemyBase, JSONModel):
             "status": self.status.value
         }
 """
-"""
-class UserToken(SQLAlchemyBase):
-    __tablename__ = "users_tokens"
 
-    id = Column(Integer, primary_key=True)
-    token = Column(Unicode(50), nullable=False, unique=True)
-    user_id = Column(Integer, ForeignKey("users.id", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
-    user = relationship("User", back_populates="tokens")
-"""
+class Imatge(SQLAlchemyBase):
+    __tablename__ = "imatges"
+    nom_imatge = Column(UnicodeText, primary_key=True, unique=True)
+    imatge_nivell = Column(Unicode(50))
+
+class Partida(SQLAlchemyBase):
+    __tablename__ = "partides"
+    id_partida = Column(Integer, primary_key=True)
+    username = Column(Unicode(50), nullable=False, unique=True)
+    score = Column(Integer, ForeignKey("players.username", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
+    temps = Column(Integer)
+    guanyat = Column(Boolean)
+
+class PlayerToken(SQLAlchemyBase):
+    __tablename__ = "players_tokens"
+    username = Column(Integer, ForeignKey("players.username"))
+    token = Column(Unicode(50), nullable=False, unique=True, primary_key=True)
+
 class Player(SQLAlchemyBase):
     __tablename__ = "players"
     username = Column(UnicodeText,primary_key=True, unique=True)
+    tokens = relationship("PlayerToken", back_populates="player", cascade="all, delete-orphan")
     password = Column(Unicode(50), nullable=False)
     pic_coins = Column(Integer, default=0)
     wins = Column(Integer, default = 0)
@@ -169,7 +181,7 @@ class Player(SQLAlchemyBase):
 class Card(SQLAlchemyBase):
     __tablename__ = "cards"
     letter = Column(UnicodeText,primary_key=True, unique=True)
-    image = Column(image_attachment('UserPicture'))
+    imatge_lletra = Column(Unicode(50))
     
 """
 class User(SQLAlchemyBase, JSONModel):
@@ -191,43 +203,44 @@ class User(SQLAlchemyBase, JSONModel):
     photo = Column(Unicode(255))
     events_owner = relationship("Event", back_populates="owner", cascade="all, delete-orphan")
     events_enrolled = relationship("Event", back_populates="registered")
+"""
+@hybrid_property
+def public_profile(self):
+    return {
+        "created_at": self.created_at.strftime(settings.DATETIME_DEFAULT_FORMAT),
+        "username": self.username,
+        "genere": self.genere.value,
+        "photo": self.photo,
+    }
 
-    @hybrid_property
-    def public_profile(self):
-        return {
-            "created_at": self.created_at.strftime(settings.DATETIME_DEFAULT_FORMAT),
-            "username": self.username,
-            "genere": self.genere.value,
-            "photo": self.photo,
-        }
+@hybrid_property
+def photo_url(self):
+    return _generate_media_url(self, "photo")
 
-    @hybrid_property
-    def photo_url(self):
-        return _generate_media_url(self, "photo")
+@hybrid_property
+def photo_path(self):
+    return _generate_media_path(self, "photo")
 
-    @hybrid_property
-    def photo_path(self):
-        return _generate_media_path(self, "photo")
+@hybrid_method
+def set_password(self, password_string):
+    self.password = pbkdf2_sha256.hash(password_string)
 
-    @hybrid_method
-    def set_password(self, password_string):
-        self.password = pbkdf2_sha256.hash(password_string)
+@hybrid_method
+def check_password(self, password_string):
+    return pbkdf2_sha256.verify(password_string, self.password)
 
-    @hybrid_method
-    def check_password(self, password_string):
-        return pbkdf2_sha256.verify(password_string, self.password)
+@hybrid_method
+def create_token(self):
+    if len(self.tokens) < settings.MAX_USER_TOKENS:
+        token_string = binascii.hexlify(os.urandom(25)).decode("utf-8")
+        aux_token = UserToken(token=token_string, user=self)
+        return aux_token
+    else:
+        raise falcon.HTTPBadRequest(title=messages.quota_exceded, description=messages.maximum_tokens_exceded)
+    
 
-    @hybrid_method
-    def create_token(self):
-        if len(self.tokens) < settings.MAX_USER_TOKENS:
-            token_string = binascii.hexlify(os.urandom(25)).decode("utf-8")
-            aux_token = UserToken(token=token_string, user=self)
-            return aux_token
-        else:
-            raise falcon.HTTPBadRequest(title=messages.quota_exceded, description=messages.maximum_tokens_exceded)
-
-    @hybrid_property
-    def json_model(self):
+@hybrid_property
+def json_model(self):
         return {
             "created_at": self.created_at.strftime(settings.DATETIME_DEFAULT_FORMAT),
             "username": self.username,
@@ -240,4 +253,3 @@ class User(SQLAlchemyBase, JSONModel):
             "phone": self.phone,
             "photo": self.photo_url
         }
-"""
