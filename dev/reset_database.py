@@ -38,6 +38,8 @@ if __name__ == "__main__":
     SQLAlchemyBase.metadata.create_all(db.DB_ENGINE)
 
 
+    mylogger.info("Creating user alex and paula...")
+
     player = Player(
         username = "Alex",
         password = "1234",
@@ -46,13 +48,24 @@ if __name__ == "__main__":
         xp = 4
     )
 
+    player2 = Player(
+        username = "Paula",
+        password = "1234",
+        pic_coins = 2,
+        wins = 3,
+        xp = 4
+    )
+
     db_session.add(player)
+    db_session.add(player2) 
 
 
 
     # -------------------- CREATE USERS --------------------
-    mylogger.info("Creating default users...")
+    'mylogger.info("Creating default users...")'
     # noinspection PyArgumentList
+
+    """
     user_admin = User(
         created_at=datetime.datetime(2020, 1, 1, 0, 1, 1),
         username="admin",
@@ -93,7 +106,7 @@ if __name__ == "__main__":
     db_session.add(user_1)
     db_session.add(user_2)
 
-
+"""
 
     # -------------------- CREATE EVENTS --------------------
 

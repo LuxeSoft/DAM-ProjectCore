@@ -41,6 +41,12 @@ application.add_route("/account/delete_token", account_resources.ResourceDeleteU
 application.add_route("/users/register", user_resources.ResourceRegisterUser())
 application.add_route("/users/show/{username}", user_resources.ResourceGetUserProfile())
 
+'start peticions noves...'
+
+application.add_route("/partida",partida_resources.ResourceGetPartida())
+
+'end peticions noves'
+
 application.add_route("/events", event_resources.ResourceGetEvents())
 application.add_route("/events/show/{id:int}", event_resources.ResourceGetEvent()) 
 application.add_sink(handle_404, "")
