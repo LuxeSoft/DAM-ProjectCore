@@ -183,6 +183,10 @@ class Card(SQLAlchemyBase, JSONModel):
     letter = Column(UnicodeText,primary_key=True, unique=True)
     imatge_lletra = Column(Unicode(50))
     
+class posicio(SQLAlchemyBase, JSONModel):
+    __tablename__ = "cards"
+    id_partida = Column(Integer, ForeignKey("partida.username"))
+    letter = Column(UnicodeText, ForeignKey("cards.letter"))
 '''
 
 class UserToken(SQLAlchemyBase, JSONModel):
