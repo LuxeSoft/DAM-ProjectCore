@@ -69,8 +69,8 @@ class EventStatusEnum(enum.Enum):
     ongoing = "G"
     undefined = "U"
 
-
-"""EventParticipantsAssociation = Table("event_participants_association", SQLAlchemyBase.metadata,
+'''
+EventParticipantsAssociation = Table("event_participants_association", SQLAlchemyBase.metadata,
                                      Column("event_id", Integer,
                                            ForeignKey("events.id", onupdate="CASCADE", ondelete="CASCADE"),
                                             nullable=False),
@@ -78,9 +78,9 @@ class EventStatusEnum(enum.Enum):
                                             ForeignKey("users.id", onupdate="CASCADE", ondelete="CASCADE"),
                                             nullable=False),
                                      )
-"""
 
-"""
+
+
 class Event(SQLAlchemyBase, JSONModel):
     __tablename__ = "events"
 
@@ -95,7 +95,7 @@ class Event(SQLAlchemyBase, JSONModel):
     owner_id = Column(Integer, ForeignKey("users.id", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
     owner = relationship("User", back_populates="events_owner")
     registered = relationship("User", secondary=EventParticipantsAssociation, back_populates="events_enrolled")
-    posar mateixos camps q altres taules
+    #posar mateixos camps q altres taules
     
 
     @hybrid_property
@@ -148,14 +148,14 @@ class Event(SQLAlchemyBase, JSONModel):
             "registered": [enrolled.username for enrolled in self.registered],
             "status": self.status.value
         }
-"""
 
-class Imatge(SQLAlchemyBase):
+'''
+class Imatge(SQLAlchemyBase, JSONModel):
     __tablename__ = "imatges"
     nom_imatge = Column(UnicodeText, primary_key=True, unique=True)
     imatge_nivell = Column(Unicode(50))
 
-class Partida(SQLAlchemyBase):
+class Partida(SQLAlchemyBase, JSONModel):
     __tablename__ = "partides"
     id_partida = Column(Integer, primary_key=True)
     username = Column(Unicode(50), nullable=False, unique=True)
@@ -163,12 +163,12 @@ class Partida(SQLAlchemyBase):
     temps = Column(Integer)
     guanyat = Column(Boolean)
 
-class PlayerToken(SQLAlchemyBase):
+class PlayerToken(SQLAlchemyBase, JSONModel):
     __tablename__ = "players_tokens"
     username = Column(Integer, ForeignKey("players.username"))
     token = Column(Unicode(50), nullable=False, unique=True, primary_key=True)
 
-class Player(SQLAlchemyBase):
+class Player(SQLAlchemyBase, JSONModel):
     __tablename__ = "players"
     username = Column(UnicodeText,primary_key=True, unique=True)
     tokens = relationship("PlayerToken", back_populates="player", cascade="all, delete-orphan")
@@ -178,14 +178,19 @@ class Player(SQLAlchemyBase):
     xp = Column(Integer, default=0)
 
 
-class Card(SQLAlchemyBase):
+class Card(SQLAlchemyBase, JSONModel):
     __tablename__ = "cards"
     letter = Column(UnicodeText,primary_key=True, unique=True)
     imatge_lletra = Column(Unicode(50))
     
-"""
-class User(SQLAlchemyBase, JSONModel):
+'''
 
+class UserToken(SQLAlchemyBase, JSONModel):
+    __tablename__ = "user_token"
+    username = Column(Integer, ForeignKey("user.id"))
+    token = Column(Unicode(50), nullable=False, unique=True, primary_key=True)
+
+class User(SQLAlchemyBase, JSONModel):
 
     __tablename__ = "users"
 
@@ -203,7 +208,7 @@ class User(SQLAlchemyBase, JSONModel):
     photo = Column(Unicode(255))
     events_owner = relationship("Event", back_populates="owner", cascade="all, delete-orphan")
     events_enrolled = relationship("Event", back_populates="registered")
-"""
+'''
 @hybrid_property
 def public_profile(self):
     return {
@@ -233,7 +238,7 @@ def check_password(self, password_string):
 def create_token(self):
     if len(self.tokens) < settings.MAX_USER_TOKENS:
         token_string = binascii.hexlify(os.urandom(25)).decode("utf-8")
-        aux_token = UserToken(token=token_string, user=self)
+        aux_token = PlayerToken(token=token_string, user=self)
         return aux_token
     else:
         raise falcon.HTTPBadRequest(title=messages.quota_exceded, description=messages.maximum_tokens_exceded)

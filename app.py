@@ -43,7 +43,7 @@ application.add_route("/users/show/{username}", user_resources.ResourceGetUserPr
 
 'start peticions noves...'
 
-application.add_route("/partida",partida_resources.ResourceGetPartida())
+application.add_route("/partida",event_resources.ResourceGetPartida())
 
 'end peticions noves'
 
