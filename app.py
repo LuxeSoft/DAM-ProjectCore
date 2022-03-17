@@ -42,6 +42,5 @@ application.add_route("/users/register", user_resources.ResourceRegisterUser())
 application.add_route("/users/show/{username}", user_resources.ResourceGetUserProfile())
 
 application.add_route("/events", event_resources.ResourceGetEvents())
-application.add_route("/events/show/{id:int}", event_resources.ResourceGetEvent())
-
+application.add_route("/events/show/{id:int}", event_resources.ResourceGetEvent()) 
 application.add_sink(handle_404, "")

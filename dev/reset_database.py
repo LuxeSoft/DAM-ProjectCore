@@ -38,6 +38,17 @@ if __name__ == "__main__":
     SQLAlchemyBase.metadata.create_all(db.DB_ENGINE)
 
 
+    player = Player(
+        username = "Alex",
+        password = "1234",
+        pic_coins = 2,
+        wins = 3,
+        xp = 4
+    )
+
+    db_session.add(player)
+
+
 
     # -------------------- CREATE USERS --------------------
     mylogger.info("Creating default users...")
@@ -131,28 +142,6 @@ if __name__ == "__main__":
     db_session.commit()
 
 
-    '----------------------------------------------------------------'
 
-    mylogger.info('creant jugadors')
 
-    for i in range(1, 11):
-        player = Player(
-            username = "username" + i,
-            password = i,
-            pic_coins = 0
-            wins = 0
-            xp = 0
-        )
-
-    
-    mylogger.info('creant cartes')
-
-    for i in range(1, 11):
-        carta = Card(
-            letter = str(i),
-            image = "",
-        )
-
-    '----------------------------------------------------------------'
-
-    db_session.close()
+db_session.close()

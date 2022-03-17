@@ -94,6 +94,8 @@ class Event(SQLAlchemyBase, JSONModel):
     owner_id = Column(Integer, ForeignKey("users.id", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
     owner = relationship("User", back_populates="events_owner")
     registered = relationship("User", secondary=EventParticipantsAssociation, back_populates="events_enrolled")
+    posar mateixos camps q altres taules
+    
 
     @hybrid_property
     def poster_url(self):
