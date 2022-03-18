@@ -14,9 +14,9 @@ else:
 
 
 DB_PORT = "3306"
-DB_NAME = "dev-test"
-DB_USERNAME = "dev-user"
-DB_PASSWORD = "1234"
+DB_NAME = "game"
+DB_USERNAME = "admin"
+DB_PASSWORD = "campeones69"
 DB_ENCODING = "utf8"
 
 # i18n settings
