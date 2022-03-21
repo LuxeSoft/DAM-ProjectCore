@@ -20,7 +20,7 @@ class ResourceGetPartida(DAMCoreResource):
         
         resp.media = response_partida
         resp.status = falcon.HTTP_200
-
+    
 
 class ResourceGetPlayer(DAMCoreResource):
     def on_get(self,req,resp,*args,**kwargs):
@@ -32,6 +32,7 @@ class ResourceGetPlayer(DAMCoreResource):
 
         if aux_events is not None:
             for current_event in aux_events.all():
+                print("Insert for")
                 response_player.append(current_event.json_model)
         
         resp.media = response_player
