@@ -44,6 +44,8 @@ application.add_route("/", common_resources.ResourceHome())
 'start peticions noves...'
 
 application.add_route("/partida",partida_resource.ResourceGetPartida())
+application.add_route("/player",partida_resource.ResourceGetPlayer())
+
 
 'end peticions noves'
 

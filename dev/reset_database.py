@@ -56,6 +56,20 @@ if __name__ == "__main__":
         xp = 4
     )
 
+    for i in range(1,10):
+        newUser = Player (
+            username = "Usuari " + str(i),
+            password = "1234",
+            pic_coins = 0,
+            wins = 0,
+            xp = 0 
+        )    
+        db_session.add(newUser)    
+
+
+
+    
+
     #player1.tokens.append(PlayerToken(token="656e50e154865a5dc469b80437ed2f963b8f58c8857b66c9bf"))
     #player2.tokens.append(PlayerToken(token="656e50e154865a5dc469b80437ed2f963b8f58c8857b66c9bf"))
 
