@@ -158,7 +158,7 @@ class Partida(SQLAlchemyBase, JSONModel):
     __tablename__ = "partides"
     id_partida = Column(Integer, primary_key=True)
     username = Column(Unicode(200), nullable=False, unique=True)
-    #score = Column(Integer, ForeignKey("players.username", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
+    #username = Column(Integer, ForeignKey("players.username", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
     temps = Column(Integer)
     guanyat = Column(Boolean)
 
@@ -189,14 +189,22 @@ class Player(SQLAlchemyBase, JSONModel):
 
     @hybrid_property
     def json_model(self):
-            return {
-                "username": self.username,
-                "password": self.password,
-                "pic_coins": self.pic_coins,
-                "wins": self.wins,
-                "xp": self.xp,
-            }
+        return {
+            "username": self.username,
+            "password": self.password,
+            "pic_coins": self.pic_coins,
+            "wins": self.wins,
+            "xp": self.xp,
+        }
 
+    @hybrid_property
+    def public_profile(self):
+        return {
+            "username": self.username,
+            "pic_coins": self.pic_coins,
+            "wins": self.wins,
+            "xp": self.xp
+        }
 
 class Card(SQLAlchemyBase, JSONModel):
     __tablename__ = "cards"

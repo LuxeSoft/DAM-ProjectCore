@@ -12,28 +12,22 @@ class ResourceGetPartida(DAMCoreResource):
 
         response_partida = list()
 
-        aux_events = self.db_session.query(Partida)
+        if "username" in kwargs:
+            try:
+                aux_user = self.db_session.query(Player).filter(Player.username == kwargs["username"]).one()
 
-        if aux_events is not None:
-            for current_event in aux_events.all():
-                response_partida.append(current_event.json_model)
-        
-        resp.media = response_partida
-        resp.status = falcon.HTTP_200
+                resp.media = aux_user.public_profile
+                resp.status = falcon.HTTP_200
+            except NoResultFound:
+                raise falcon.HTTPBadRequest(description=messages.user_not_found)
+            
+        else:    
+            aux_events = self.db_session.query(Partida)
+
+            if aux_events is not None:
+                for current_event in aux_events.all():
+                    response_partida.append(current_event.json_model)
+            
+            resp.media = response_partida
+            resp.status = falcon.HTTP_200
     
-
-class ResourceGetPlayer(DAMCoreResource):
-    def on_get(self,req,resp,*args,**kwargs):
-        super(ResourceGetPlayer, self).on_get(req,resp, *args,**kwargs)
-
-        response_player = list()
-
-        aux_events = self.db_session.query(Player)
-
-        if aux_events is not None:
-            for current_event in aux_events.all():
-                print("Insert for")
-                response_player.append(current_event.json_model)
-        
-        resp.media = response_player
-        resp.status = falcon.HTTP_200

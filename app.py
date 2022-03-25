@@ -8,7 +8,7 @@ import falcon
 import messages
 import middlewares
 from falcon_multipart.middleware import MultipartMiddleware
-from resources import common_resources, partida_resource
+from resources import common_resources, partida_resource, player_resource
 from settings import configure_logging
 
 # LOGGING
@@ -44,8 +44,9 @@ application.add_route("/", common_resources.ResourceHome())
 'start peticions noves...'
 
 application.add_route("/partida",partida_resource.ResourceGetPartida())
-application.add_route("/player",partida_resource.ResourceGetPlayer())
-
+application.add_route("/player",player_resource.ResourceGetAllPlayers())
+application.add_route("/player/show/{username}", player_resource.ResourceGetPlayer())
+application.add_route("/player/add", player_resource.ResourceRegisterPlayer())
 
 'end peticions noves'
 
