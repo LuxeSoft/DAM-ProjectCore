@@ -33,6 +33,13 @@ class ResourceRegisterPlayer(DAMCoreResource):
         try:
 
             # Falta un troç de codi
+            aux_player.username = req.media["username"]
+            aux_player.password = req.media["password"]
+            aux_player.pic_coins = req.media["pic_coins"]
+            aux_player.wins = req.media["wins"]
+            aux_player.xp = req.media["xp"]
+
+            self.db_session.add(aux_player)
 
             try:
                 self.db_session.commit()
