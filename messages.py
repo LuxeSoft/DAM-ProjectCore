@@ -5,6 +5,8 @@ import gettext
 
 _ = gettext.gettext
 
+error_partida_no_ex = _("partida no existeix")
+error_partida_ex = _("partida exists")
 authorization_header_required = _("Authorization header required")
 error_saving_user_token = _("Error when saving the user token")
 error_removing_user_token = _("Error removing the user token")
