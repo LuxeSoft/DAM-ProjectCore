@@ -23,9 +23,9 @@ class ResourceCardByName(DAMCoreResource):
         else:    
             raise falcon.HTTPMissingParam("letter")
 
-class ResourceAddImage(DAMCoreResource): #guarda imatge
+class ResourceAddImageCard(DAMCoreResource): #guarda imatge
     def on_post(self, req, resp, *args, **kwargs):
-        super(ResourceAddImage, self).on_post(req, resp, *args, **kwargs)
+        super(ResourceAddImageCard, self).on_post(req, resp, *args, **kwargs)
 
         #ruta imatge
 

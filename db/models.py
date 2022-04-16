@@ -87,7 +87,7 @@ class Partida(SQLAlchemyBase, JSONModel):
     __tablename__ = "partides"
     id_partida = Column(Integer, primary_key=True)
     username = Column(Unicode(200), nullable=False, unique=True)
-    #username = Column(Integer, ForeignKey("players.username", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
+    username = Column(Integer, ForeignKey("players.username", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
     temps = Column(Integer)
     guanyat = Column(Boolean)
 
@@ -134,8 +134,3 @@ class Card(SQLAlchemyBase, JSONModel):
     letter = Column(Unicode(200),primary_key=True, unique=True)
     imatge_lletra = Column(Unicode(50))
     
-#class posicio(SQLAlchemyBase, JSONModel):
-#    __tablename__ = "posicio"
-#    id_partida = Column(Integer,ForeignKey("partida.username"))
-#    letter = Column(UnicodeText, ForeignKey("cards.letter"))
-# FER COM EventParticipantsAssociation

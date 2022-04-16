@@ -8,7 +8,7 @@ import falcon
 import messages
 import middlewares
 from falcon_multipart.middleware import MultipartMiddleware
-from resources import common_resources, partida_resource, player_resource
+from resources import common_resources, imatge_resource, partida_resource, player_resource, card_resource
 from settings import configure_logging
 
 # LOGGING
@@ -33,20 +33,22 @@ app = application = falcon.API(
 )
 application.add_route("/", common_resources.ResourceHome())
 
-#application.add_route("/account/profile", account_resources.ResourceAccountUserProfile())
-#application.add_route("/account/profile/update_profile_image", account_resources.ResourceAccountUpdateProfileImage())
-#application.add_route("/account/create_token", account_resources.ResourceCreateUserToken())
-#application.add_route("/account/delete_token", account_resources.ResourceDeleteUserToken())
-
-#application.add_route("/users/register", user_resources.ResourceRegisterUser())
-#application.add_route("/users/show/{username}", user_resources.ResourceGetUserProfile())
-
 'start peticions noves...'
 
 application.add_route("/partida",partida_resource.ResourceGetPartida())
+application.add_route("/partida",partida_resource.ResourceGetPartidaById)
+application.add_route("/partida",partida_resource.ResourceSavePartida())
+
 application.add_route("/player",player_resource.ResourceGetAllPlayers())
 application.add_route("/player/show/{username}", player_resource.ResourceGetPlayer())
 application.add_route("/player/add", player_resource.ResourceRegisterPlayer())
+
+application.add_route("/imatges/show/{nom_imatge}", imatge_resource.ResourceGetImageByName())
+application.add_route("/imatges/add", imatge_resource.ResourceAddImage())
+
+application.add_route("/cards/show/{letter}", card_resource.ResourceCardByName())
+application.add_route("/cards/add", card_resource.ResourceAddImageCard())
+
 
 'end peticions noves'
 
