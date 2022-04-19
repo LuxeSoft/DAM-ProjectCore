@@ -3,6 +3,7 @@
 
 import binascii
 import datetime
+from email.policy import default
 import enum
 import logging
 import os
@@ -47,7 +48,7 @@ def _generate_media_url(class_instance, class_attibute_name, default_image=False
 
 def _generate_media_path(class_instance, class_attibute_name):
     class_path = "/{0}{1}{2}/{3}/{4}/".format(settings.STATIC_URL, settings.MEDIA_PREFIX, class_instance.__tablename__,
-                                              str(class_instance.id), class_attibute_name)
+                                              str(1), class_attibute_name)
     return class_path
 
 
@@ -71,23 +72,33 @@ class EventStatusEnum(enum.Enum):
 
 class Imatge(SQLAlchemyBase, JSONModel):
     __tablename__ = "imatges"
+    id = Column(Integer, default=1) 
     nom_imatge = Column(Unicode(200), primary_key=True, unique=True)
     imatge_nivell = Column(Unicode(200))
     nivell = Column(Integer)
 
     @hybrid_property
     def photo_url(self):
-        return _generate_media_url(self, "photo")
+        return _generate_media_url(self, "imatge_nivell")
 
     @hybrid_property
     def photo_path(self):
-        return _generate_media_path(self, "photo")
+        return _generate_media_path(self, "imatge_nivell")
+
+    
+    @hybrid_property
+    def public_profile(self):
+        return {
+            "nom_imatge": self.nom_imatge,
+            "imatge_nivell": self.imatge_nivell,
+            "nivell": self.photo_url
+        }
 
 class Partida(SQLAlchemyBase, JSONModel):
     __tablename__ = "partides"
     id_partida = Column(Integer, primary_key=True)
     username = Column(Unicode(200), nullable=False, unique=True)
-    username = Column(Integer, ForeignKey("players.username", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
+    #username = Column(Integer, ForeignKey("players.username", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
     temps = Column(Integer)
     guanyat = Column(Boolean)
 
@@ -131,6 +142,22 @@ class Player(SQLAlchemyBase, JSONModel):
 
 class Card(SQLAlchemyBase, JSONModel):
     __tablename__ = "cards"
+    id = Column(Integer, default=1)
     letter = Column(Unicode(200),primary_key=True, unique=True)
     imatge_lletra = Column(Unicode(50))
+
+    @hybrid_property
+    def photo_url(self):
+        return _generate_media_url(self, "imatge_lletra")
+
+    @hybrid_property
+    def photo_path(self):
+        return _generate_media_path(self, "imatge_lletra")
     
+    @hybrid_property
+    def public_profile(self):
+        return {
+            "letter": self.letter,
+            "image_letter": self.imatge_lletra,
+            "card_url": self.photo_url
+        }

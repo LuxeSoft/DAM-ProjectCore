@@ -28,7 +28,6 @@ class ResourceAddImageCard(DAMCoreResource): #guarda imatge
         super(ResourceAddImageCard, self).on_post(req, resp, *args, **kwargs)
 
         #ruta imatge
-
         card = Card()
         resource_path = card.photo_path
 

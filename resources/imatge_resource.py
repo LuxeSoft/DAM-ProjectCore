@@ -13,7 +13,7 @@ class ResourceGetImageByName(DAMCoreResource):
 
         if "nom_imatge" in kwargs:
             try:
-                aux_user = self.db_session.query(Imatge).filter(Imatge.username == kwargs["nom_imatge"]).one()
+                aux_user = self.db_session.query(Imatge).filter(Imatge.nom_imatge == kwargs["nom_imatge"]).one()
 
                 resp.media = aux_user.public_profile
                 resp.status = falcon.HTTP_200

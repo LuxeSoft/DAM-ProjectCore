@@ -8,7 +8,7 @@ import falcon
 import messages
 import middlewares
 from falcon_multipart.middleware import MultipartMiddleware
-from resources import common_resources, imatge_resource, partida_resource, player_resource, card_resource
+from resources import imatge_resource, partida_resource, player_resource, card_resource
 from settings import configure_logging
 
 # LOGGING
@@ -31,7 +31,7 @@ app = application = falcon.API(
         MultipartMiddleware()
     ]
 )
-application.add_route("/", common_resources.ResourceHome())
+#application.add_route("/", common_resources.ResourceHome())
 
 'start peticions noves...'
 
