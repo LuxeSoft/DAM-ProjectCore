@@ -43,6 +43,7 @@ application.add_route("/player",player_resource.ResourceGetAllPlayers())
 application.add_route("/player/show/{username}", player_resource.ResourceGetPlayer())
 application.add_route("/player/add", player_resource.ResourceRegisterPlayer())
 
+application.add_route("/imatges/show/nivell/{nivell}", imatge_resource.ResourceGetImageByLevel())
 application.add_route("/imatges/show/{nom_imatge}", imatge_resource.ResourceGetImageByName())
 application.add_route("/imatges/add", imatge_resource.ResourceAddImage())
 

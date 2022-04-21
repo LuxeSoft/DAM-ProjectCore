@@ -23,6 +23,22 @@ class ResourceGetImageByName(DAMCoreResource):
         else:    
             raise falcon.HTTPMissingParam("nom_imatge")
 
+class ResourceGetImageByLevel(DAMCoreResource):
+    def on_get(self,req,resp,*args,**kwargs):
+        super(ResourceGetImageByLevel, self).on_get(req,resp, *args,**kwargs)
+
+        if "nivell" in kwargs:
+            try:
+                aux_user = self.db_session.query(Imatge).filter(Imatge.nivell == kwargs["nivell"]).one()
+
+                resp.media = aux_user.public_profile
+                resp.status = falcon.HTTP_200
+            except NoResultFound:
+                raise falcon.HTTPBadRequest(description=messages.user_not_found)
+            
+        else:    
+            raise falcon.HTTPMissingParam("nivell")
+
 class ResourceAddImage(DAMCoreResource): #guarda imatge
     def on_post(self, req, resp, *args, **kwargs):
         super(ResourceAddImage, self).on_post(req, resp, *args, **kwargs)
