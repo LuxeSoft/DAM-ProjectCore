@@ -36,7 +36,7 @@ app = application = falcon.API(
 'start peticions noves...'
 
 application.add_route("/partida",partida_resource.ResourceGetPartida())
-application.add_route("/partida",partida_resource.ResourceGetPartidaById)
+application.add_route("/partida",partida_resource.ResourceGetPartidaById())
 application.add_route("/partida",partida_resource.ResourceSavePartida())
 
 application.add_route("/player",player_resource.ResourceGetAllPlayers())
@@ -49,6 +49,7 @@ application.add_route("/imatges/add", imatge_resource.ResourceAddImage())
 
 application.add_route("/cards/show/{letter}", card_resource.ResourceCardByName())
 application.add_route("/cards/add", card_resource.ResourceAddImageCard())
+application.add_route("/cards", card_resource.ResourceCard())
 
 
 'end peticions noves'

@@ -23,6 +23,20 @@ class ResourceCardByName(DAMCoreResource):
         else:    
             raise falcon.HTTPMissingParam("letter")
 
+
+class ResourceCard(DAMCoreResource):
+    def on_get(self,req,resp,*args,**kwargs):
+        super(ResourceCard, self).on_get(req,resp, *args,**kwargs)
+
+        try:
+            aux_letter = self.db_session.query(Card).filter(Card.letter == "a").one()
+
+            resp.media = aux_letter.public_profile
+            resp.status = falcon.HTTP_200
+        except NoResultFound:
+            raise falcon.HTTPBadRequest(description="letter not found")
+    
+
 class ResourceAddImageCard(DAMCoreResource): #guarda imatge
     def on_post(self, req, resp, *args, **kwargs):
         super(ResourceAddImageCard, self).on_post(req, resp, *args, **kwargs)
