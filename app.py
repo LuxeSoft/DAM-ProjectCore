@@ -50,6 +50,8 @@ application.add_route("/imatges/add", imatge_resource.ResourceAddImage())
 application.add_route("/cards/show/{letter}", card_resource.ResourceCardByName())
 application.add_route("/cards/add", card_resource.ResourceAddImageCard())
 application.add_route("/cards", card_resource.ResourceCard())
+application.add_route("/cards/list/{imatge}", card_resource.ResourceGetListCards())
+
 
 
 'end peticions noves'

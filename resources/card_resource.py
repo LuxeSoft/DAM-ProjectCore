@@ -24,6 +24,53 @@ class ResourceCardByName(DAMCoreResource):
             raise falcon.HTTPMissingParam("letter")
 
 
+class ResourceGetListCards(DAMCoreResource):
+    def on_get(self,req,resp,*args,**kwargs):
+        super(ResourceGetListCards, self).on_get(req,resp, *args,**kwargs)
+
+        if "imatge" in kwargs:
+
+            try:
+                valor_img = kwargs["imatge"]
+                list_letters = list(valor_img)
+
+                print(list_letters) 
+
+                array_lletres = []
+
+                for letter in list_letters:
+                    aux_letter = self.db_session.query(Card).filter(Card.letter == letter).one()
+                    array_lletres.append(aux_letter.public_profile)
+                    
+                
+                array_lletres_static = ["r","w","x","m"]
+                #dicciinari amb lletres abc, fer random, random entre 0 i llargadamax
+                #TODO
+
+
+                x = 0
+
+                for i in range(len(array_lletres),8): 
+                    print(i)
+                    aux_letter = self.db_session.query(Card).filter(Card.letter == array_lletres_static[x]).one()
+                    array_lletres.append(aux_letter.public_profile)
+                    x = x+1
+
+
+                #aux_letter = self.db_session.query(Card).filter(Card.letter == kwargs["letter"]).one()
+                #resp.media = aux_letter.public_profile
+                
+                print(array_lletres)
+                resp.media = array_lletres
+                
+                resp.status = falcon.HTTP_200
+            except NoResultFound:
+                raise falcon.HTTPBadRequest(description="letter not found")
+        else:    
+            raise falcon.HTTPMissingParam("letter")
+
+
+
 class ResourceCard(DAMCoreResource):
     def on_get(self,req,resp,*args,**kwargs):
         super(ResourceCard, self).on_get(req,resp, *args,**kwargs)

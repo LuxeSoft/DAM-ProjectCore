@@ -97,10 +97,11 @@ class Imatge(SQLAlchemyBase, JSONModel):
 class Partida(SQLAlchemyBase, JSONModel):
     __tablename__ = "partides"
     id_partida = Column(Integer, primary_key=True)
-    username = Column(Unicode(200), nullable=False, unique=True)
-    #username = Column(Integer, ForeignKey("players.username", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
+    username = Column(Unicode(200), ForeignKey("players.username", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
     temps = Column(Integer)
     guanyat = Column(Boolean)
+
+    partides_player = relationship("Player", back_populates="player_partida")
 
     @hybrid_property
     def json_model(self):
@@ -120,6 +121,7 @@ class Player(SQLAlchemyBase, JSONModel):
     wins = Column(Integer, default = 0)
     xp = Column(Integer, default=0)
 
+    player_partida = relationship("Partida", back_populates="partides_player")
 
     @hybrid_property
     def json_model(self):
