@@ -8,7 +8,7 @@ import falcon
 import messages
 import middlewares
 from falcon_multipart.middleware import MultipartMiddleware
-from resources import imatge_resource, partida_resource, player_resource, card_resource
+from resources import imatge_resource, partida_resource, player_resource, card_resource, account_resources
 from settings import configure_logging
 
 # LOGGING
@@ -51,6 +51,11 @@ application.add_route("/cards/show/{letter}", card_resource.ResourceCardByName()
 application.add_route("/cards/add", card_resource.ResourceAddImageCard())
 application.add_route("/cards", card_resource.ResourceCard())
 application.add_route("/cards/list/{imatge}", card_resource.ResourceGetListCards())
+
+application.add_route("/account/profile", account_resources.ResourceAccountUserProfile())
+application.add_route("/account/profile/update_profile_image", account_resources.ResourceAccountUpdateProfileImage())
+application.add_route("/account/create_token", account_resources.ResourceCreateUserToken())
+application.add_route("/account/delete_token", account_resources.ResourceDeleteUserToken())
 
 
 

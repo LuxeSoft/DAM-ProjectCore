@@ -42,28 +42,32 @@ if __name__ == "__main__":
 
     player1 = Player(
         username = "Alex",
-        password = "1234",
         pic_coins = 2,
+        email = "alex@email.com",
         wins = 3,
         xp = 4
     )
+    player1.set_password("1234")
 
     player2 = Player(
         username = "Paula",
         password = "1234",
         pic_coins = 2,
+        email = "paula@email.com",
         wins = 3,
         xp = 4
     )
+    player2.set_password("1234")
 
     for i in range(1,10):
         newUser = Player (
             username = "Usuari " + str(i),
-            password = "1234",
             pic_coins = 0,
+            email = "email" + str(i) + "@email.com",
             wins = 0,
             xp = 0 
         )    
+        newUser.set_password("1234")
         db_session.add(newUser)    
 
 

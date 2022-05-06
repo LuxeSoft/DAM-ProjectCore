@@ -112,10 +112,19 @@ class Partida(SQLAlchemyBase, JSONModel):
                 "guanyat": self.guanyat,
             }
 
+class PlayerToken(SQLAlchemyBase):
+    __tablename__ = "players_tokens"
+
+    id = Column(Integer, primary_key=True)
+    token = Column(Unicode(50), nullable=False, unique=True)
+    player_username = Column(Unicode(200), ForeignKey("players.username", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
+    player = relationship("Player", back_populates="tokens")
+
 class Player(SQLAlchemyBase, JSONModel):
     __tablename__ = "players"
     username = Column(Unicode(200),primary_key=True, unique=True)
-    #tokens = relationship("PlayeToken", back_populates="player", cascade="all, delete-orphan")
+    email = Column(Unicode(255), nullable=False)
+    tokens = relationship("PlayerToken", back_populates="player", cascade="all, delete-orphan")
     password = Column(Unicode(200), nullable=False)
     pic_coins = Column(Integer, default=0)
     wins = Column(Integer, default = 0)
@@ -141,6 +150,23 @@ class Player(SQLAlchemyBase, JSONModel):
             "wins": self.wins,
             "xp": self.xp
         }
+    
+    @hybrid_method
+    def set_password(self, password_string):
+        self.password = pbkdf2_sha256.hash(password_string)
+
+    @hybrid_method
+    def check_password(self, password_string):
+        return pbkdf2_sha256.verify(password_string, self.password)
+
+    @hybrid_method
+    def create_token(self):
+        if len(self.tokens) < settings.MAX_USER_TOKENS:
+            token_string = binascii.hexlify(os.urandom(25)).decode("utf-8")
+            aux_token = PlayerToken(token=token_string, player=self)
+            return aux_token
+        else:
+            raise falcon.HTTPBadRequest(title=messages.quota_exceded, description=messages.maximum_tokens_exceded)
 
 class Card(SQLAlchemyBase, JSONModel):
     __tablename__ = "cards"
