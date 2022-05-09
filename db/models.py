@@ -136,6 +136,7 @@ class Player(SQLAlchemyBase, JSONModel):
     def json_model(self):
         return {
             "username": self.username,
+            "email": self.email,
             "password": self.password,
             "pic_coins": self.pic_coins,
             "wins": self.wins,
@@ -146,6 +147,7 @@ class Player(SQLAlchemyBase, JSONModel):
     def public_profile(self):
         return {
             "username": self.username,
+            "email": self.email,
             "pic_coins": self.pic_coins,
             "wins": self.wins,
             "xp": self.xp

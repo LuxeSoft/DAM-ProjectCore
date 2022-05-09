@@ -32,7 +32,8 @@ class ResourceRegisterPlayer(DAMCoreResource):
 
         try:
             aux_player.username = req.media["username"]
-            aux_player.password = req.media["password"]
+            aux_player.email = req.media["email"]
+            aux_player.set_password(req.media["password"])
             aux_player.pic_coins = req.media["pic_coins"]
             aux_player.wins = req.media["wins"]
             aux_player.xp = req.media["xp"]
