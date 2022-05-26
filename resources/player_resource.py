@@ -30,13 +30,16 @@ class ResourceRegisterPlayer(DAMCoreResource):
         super(ResourceRegisterPlayer, self).on_post(req, resp, *args, **kwargs)
         aux_player = Player()
 
+        print(req.media)
+
         try:
+            
             aux_player.username = req.media["username"]
             aux_player.email = req.media["email"]
             aux_player.set_password(req.media["password"])
-            aux_player.pic_coins = req.media["pic_coins"]
-            aux_player.wins = req.media["wins"]
-            aux_player.xp = req.media["xp"]
+            aux_player.pic_coins = 0
+            aux_player.wins = 0
+            aux_player.xp = 0
 
             self.db_session.add(aux_player)
 

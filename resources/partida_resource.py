@@ -25,6 +25,7 @@ class ResourceGetPartida(DAMCoreResource): #ok
 
 class ResourceSavePartida(DAMCoreResource):
     #@jsonschema.validate(SchemaRegisterUser)
+    '''
     def on_post(self, req, resp, *args, **kwargs):
         super(ResourceSavePartida, self).on_post(req, resp, *args, **kwargs)
         aux_partida = Partida()
@@ -61,3 +62,4 @@ class ResourceGetPartidaById(DAMCoreResource):
                 raise falcon.HTTPBadRequest(description=messages.error_partida_no_ex)
         else:
             raise falcon.HTTPMissingParam("id")
+'''
